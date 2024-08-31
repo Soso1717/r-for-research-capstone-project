@@ -33,9 +33,15 @@ To view and understand the contents of the data names() function was used to ret
 names(cuckoo_data)
 ```
 
-The head() function was implemented to preview the first 10 rows of the data, while the tail() function was run to preview the last 10 rows of the dataset, thus making it easier to observe patterns in the data.
+The names of the variables in the data is given above. The head() function was implemented to preview the first 10 rows of the data, while the tail() function was run to preview the last 10 rows of the dataset, thus making it easier to observe patterns in the data.
+
+A preview of the data is presented in @tbl-data-preview.
 
 ```{r}
+#| label: tbl-data-preview
+#| tbl-cap: "Data Preview"
+#| tbl-subcap: true
+
 head(cuckoo_data, n = 10)
 tail(cuckoo_data, n = 10)
 ```
@@ -49,31 +55,27 @@ car::some(cuckoo_data)
 
 ## Exploratory Data Analysis
 
-To investigate the main characteristics and understand the structure of the dataset, various analyses were conducted. The summary() function was run to return a key statistics overview of the data which include minimum, maximum, mean, median and quartiles for numerical variables of the data. The str() function gave statistics of the three variables in the data frame; length, breadth, species
+To investigate the main characteristics and understand the structure of the dataset, various analyses were conducted. The summary() function gave statistics of the three variables in the data frame; length, breadth, and species below:
+
+A quick descriptive statistics of the data is given below:
 
 ```{r}
 summary(cuckoo_data)
 ```
 
-The str() function was run to show the structure of the data along with the type and length of variables in the dataset. For cuckoo_data the str() function showed that the data has 120 observations, 3 variables, variables length and breadth are numerical, while species variable is character.
+The str() function was run to show the structure of the data along with the type and length of variables in the dataset. For cuckoo_data the str() function showed that the data has 120 observations, 3 variables, and the variables length and breadth are numerical, while species variable is character, as seen below:
 
 ```{r}
 str(cuckoo_data)
 ```
 
-To identify distinct species present in the data frame, the unique() function was used and it generated six species names in the data, Meadow Pipit, Tree Pipit, Hedge Sparrow, Robin, Pied Wagtail and Wren.
+To identify distinct species present in the data frame, the unique() function was used and it generated six species names in the data: Meadow Pipit, Tree Pipit, Hedge Sparrow, Robin, Pied Wagtail and Wren.
 
 ```{r}
 unique(cuckoo_data$species)
 ```
 
-To check if the dataset had any missing values, the `is.na()` function was used, which returned `FALSE` for all columns, indicating no missing values. To obtain a more concise and straightforward summary, the `colSums()` function was applied to sum up the `FALSE` values for each column, resulting in a count of `0` for all columns, thereby confirming that there was no missing data in the dataset.
-
-```{r}
-colSums(is.na(cuckoo_data))
-```
-
-The skim() function was run to obtain an extended structure of the data and gave statical values of the data such as mean, median standard deviation along with missing values and histograms of the data . This function used along with skimr package combined the functionality if the summary() and str() function.
+The skim() function was run to obtain an extended structure of the data and gave statistical values of the data such as mean, median, and standard deviation along with missing values and histograms of the data.
 
 ```{r}
 skimr::skim(cuckoo_data)
@@ -88,29 +90,34 @@ ggplot(cuckoo_data, aes(species, breadth)) +
   labs(x = "Species",
        y = "Breadth (mm)", 
        title = "Comparing Breadth size between Species")
+```
 
+```{r}
 ggplot(cuckoo_data, aes(species, length)) +
   geom_boxplot() +
   labs(x = "Species",
        y = "Length (mm)", 
        title = "Comparing Length size bewteen Species")
+```
 
-
+```{r}
 ggplot(cuckoo_data, aes(x = length, y = breadth, color = species)) +
   geom_point() +
   labs(x = "Egg Length (mm)",
        y = "Egg Breadth (mm)", 
        title = "Scatter Plot of Egg Length vs Breadth by Species")
+```
 
+```{r}
 ggplot(cuckoo_data, aes(x = length, fill = species)) +
   geom_density(alpha = 0.5) +
   labs(title = "Density Plot of Egg Length by Species", x = "Egg Length (mm)", y = "Density")
+```
 
+```{r}
 ggplot(cuckoo_data, aes(x = breadth, fill = species)) +
   geom_density(alpha = 0.5) +
   labs(title = "Density Plot of Egg Breadth by Species", x = "Egg Breadth (mm)", y = "Density")
-
-
 ```
 
 ## Inferential Statistical Analysis
@@ -118,21 +125,31 @@ ggplot(cuckoo_data, aes(x = breadth, fill = species)) +
 Two-way ANOVA to test how the species (dependent variable) influences the length (independent variable) of eggs from different bird species (independent variable).
 
 ```{r}
-aov(breadth ~ species, data = cuckoo_data)
+breadth_anova <- aov(breadth ~ species, data = cuckoo_data) |>
+  anova()
+
+breadth_anova
 ```
 
 Two-way ANOVA test to test how bird species independently influence breadth.
 
 ```{r}
-aov(length ~ species, data = cuckoo_data)
+length_anova <- aov(length ~ species, data = cuckoo_data)|>
+  anova()
 
+length_anova
 ```
-
-Multivariate Linear Regression to assess possible linear relationship of length and breadth measurements of eggs based on species.
 
 ```{r}
 library(ggplot2)
+lm_model <- lm(breadth ~ length + species, data = cuckoo_data) |>
+  summary()
 
+ggplot(cuckoo_data, aes(x = length , y = breadth)) +
+  geom_point() +
+  geom_smooth(se = FALSE, method = "lm") +
+  ggtitle("Breadth vs Length of Eggs") +
+  theme_bw()
 ```
 
 ## Discussion and Conclusion
