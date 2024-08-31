@@ -8,41 +8,49 @@ toc-title: "Contents"
 editor: visual
 ---
 
-## Introduction 
+## Introduction
 
-The common cuckoo, *Cuculus canorus* are unusual birds with unique behaviours and characteristics. Termed as brood parasites, they lay eggs in the nests of other, often smaller bird species where the egg will be incubated by host and the chick will be provided for (Davies, 2011; Lahti, 2005).
+The Common Cuckoo (*Cuculus canorus*) is a bird species known for its distinctive behaviours and characteristics, particularly its unusual reproductive strategy. As brood parasites, cuckoos lay their eggs in the nests of other, often smaller, bird species. The host bird then incubates the cuckoo egg and unknowingly raises the chick as its own (Davies, 2011; Lahti, 2005). According to Kruger and Davies (2003), Davies (2011), and Lahti (2005), the survival of the cuckoo species hinges on their remarkable adaptation strategies, which include evading host defences through deception and matching their egg and chick development with the host's incubation and provisioning patterns.
 
-The existence and survival of the cuckoo bird species are owed to the bird's extraordinary adaptation traits of trickery where adult cuckoos and cuckoo eggs and chicks evade host defences, and tuning which is how once accepted, cuckoo egg and chick development are attuned to host incubation and provisioning strategies (Davis, 2011).
+Research conducted in Russia has provided evidence of evolutionary adaptation in cuckoos, particularly in their ability to vary egg size to match that of their hosts. This adaptation reduces the likelihood of egg rejection, as host birds are more inclined to reject eggs that are significantly different or larger than their own clutch (Meshcheryagina et al., 2018). The study found that while the breadth of cuckoo eggs closely matched that of the host species, the length did not, suggesting a trade-off that limits the cuckoo's ability to maintain larger egg volumes. This alignment in egg breadth is likely an evolved response to avoid host rejection (Meshcheryagina *et al*., 2018).
 
-Research conducted in Russia has shown that cuckoo birds vary their egg size to match the hosts, proving evidence of evolutionary adaptation. Eggs sticking above the host clutch are more prone to rejection by the host, thereby the breadth of cuckoo eggs should match the host´s eggs (Meshcheryagina *et al*., 2018).
-
-The study suggested that a match between cuckoo and host egg breadth could have evolved as a response to host rejection behaviour, as it has been shown that a host is likely to reject an egg larger than the rest of the clutch (Meshcheryagina *et al*., 2018). The study found that the egg breadth of cuckoo birds matched the egg breadth of host species, while the length did not match the egg length of their hosts, thereby limiting cuckoo birds from maintaining large egg volumes (Meshcheryagina *et al*., 2018).
-
-This report investigates the egg dimension of six cuckoo bird species in terms of length and breadth. To determine
-
-with 120 observations
-
-![](images/clipboard-895778257.png){fig-align="center" width="295"}
-
-Female violet Cuckoo bird. Source: [*https://www.worldatlas.com/articles/cuckoo-birds-animals-of-the-world.html*](https://www.worldatlas.com/articles/cuckoo-birds-animals-of-the-world.html)
+This project aims to investigate the egg dimensions—length and breadth—of six different cuckoo bird species, analysing 120 eggs. Various statistical analyses will be performed to determine differences in these dimensions both between and within the species.
 
 ## Importing Data
 
-Importing data using
+For data manipulation, visualisation and analysis and to effectively read and access the relevant cuckoo data, the "tidyverse" and "readr" packages were installed and activated. The read.csv () function was used to import and read the data that is in CSV format. The data was assigned a new name termed cuckoo_data.
 
 ```{r}
 library(tidyverse)
 library(readr)
 
 cuckoo_data <- read.csv("https://raw.githubusercontent.com/xrander/bootcamp-test/master/data/cuckoo.csv")
+
+```
+
+To view and understand the contents of the data names() function was used to return the names of the columns in the cuckoo_data, this also ensures that the data has been imported correctly.
+
+```{r}
 names(cuckoo_data)
+```
+
+The head() function was implemented to preview the first 10 rows of the data, while the tail() function was run to preview the last 10 rows of the dataset, thereby making it easier to observe patterns in the data.
+
+```{r}
 head(cuckoo_data, n = 10)
 tail(cuckoo_data, n = 10)
+```
+
+Lastly, to further understand and observe the cuckoo_data the car::some() function was run, first setting a seed, to randomly select and generate a sample of rows from cuckoo_data dataset. The set.seed() allows the same results everytime the code is run.
+
+```{r}
 set.seed(3891)
 car::some(cuckoo_data)
 ```
 
 ## Exploratory Data Analysis
+
+To investigate the main characteristics of the data
 
 ```{r}
 summary(cuckoo_data)
