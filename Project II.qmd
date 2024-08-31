@@ -1,0 +1,124 @@
+---
+title: "Project II: Cuckoo Eggs Dimension"
+author: "Nangamso Lindeni"
+format: pdf
+toc: true
+toc-depth: 3
+toc-title: "Contents"
+editor: visual
+---
+
+## Introduction 
+
+The common cuckoo, *Cuculus canorus* are unusual birds with unique behaviours and characteristics. Termed as brood parasites, they lay eggs in the nests of other, often smaller bird species where the egg will be incubated by host and the chick will be provided for (Davies, 2011; Lahti, 2005).
+
+The existence and survival of the cuckoo bird species are owed to the bird's extraordinary adaptation traits of trickery where adult cuckoos and cuckoo eggs and chicks evade host defences, and tuning which is how once accepted, cuckoo egg and chick development are attuned to host incubation and provisioning strategies (Davis, 2011).
+
+Research conducted in Russia has shown that cuckoo birds vary their egg size to match the hosts, proving evidence of evolutionary adaptation. Eggs sticking above the host clutch are more prone to rejection by the host, thereby the breadth of cuckoo eggs should match the host´s eggs (Meshcheryagina *et al*., 2018).
+
+The study suggested that a match between cuckoo and host egg breadth could have evolved as a response to host rejection behaviour, as it has been shown that a host is likely to reject an egg larger than the rest of the clutch (Meshcheryagina *et al*., 2018). The study found that the egg breadth of cuckoo birds matched the egg breadth of host species, while the length did not match the egg length of their hosts, thereby limiting cuckoo birds from maintaining large egg volumes (Meshcheryagina *et al*., 2018).
+
+This report investigates the egg dimension of six cuckoo bird species in terms of length and breadth. To determine
+
+with 120 observations
+
+![](images/clipboard-895778257.png){fig-align="center" width="295"}
+
+Female violet Cuckoo bird. Source: [*https://www.worldatlas.com/articles/cuckoo-birds-animals-of-the-world.html*](https://www.worldatlas.com/articles/cuckoo-birds-animals-of-the-world.html)
+
+## Importing Data
+
+Importing data using
+
+```{r}
+library(tidyverse)
+library(readr)
+
+cuckoo_data <- read.csv("https://raw.githubusercontent.com/xrander/bootcamp-test/master/data/cuckoo.csv")
+names(cuckoo_data)
+head(cuckoo_data, n = 10)
+tail(cuckoo_data, n = 10)
+set.seed(3891)
+car::some(cuckoo_data)
+```
+
+## Exploratory Data Analysis
+
+```{r}
+summary(cuckoo_data)
+
+str(cuckoo_data)
+
+unique(cuckoo_data$species)
+
+colSums(is.na(cuckoo_data))
+
+skimr::skim(cuckoo_data)
+
+```
+
+## Visualisation
+
+```{r}
+library(ggplot2)
+ggplot(cuckoo_data, aes(species, breadth)) + 
+  geom_boxplot() + 
+  labs(x = "Species",
+       y = "Breadth (mm)", 
+       title = "Comparing Breadth size between Species")
+
+ggplot(cuckoo_data, aes(species, length)) +
+  geom_boxplot() +
+  labs(x = "Species",
+       y = "Length (mm)", 
+       title = "Comparing Length size bewteen Species")
+
+
+ggplot(cuckoo_data, aes(x = length, y = breadth, color = species)) +
+  geom_point() +
+  labs(x = "Egg Length (mm)",
+       y = "Egg Breadth (mm)", 
+       title = "Scatter Plot of Egg Length vs Breadth by Species")
+
+ggplot(cuckoo_data, aes(x = length, fill = species)) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Density Plot of Egg Length by Species", x = "Egg Length (mm)", y = "Density")
+
+ggplot(cuckoo_data, aes(x = breadth, fill = species)) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Density Plot of Egg Breadth by Species", x = "Egg Breadth (mm)", y = "Density")
+
+cuckoo_data2 <- gather(cuckoo_data, key = "measurement", value = "value", length, breadth)
+
+ggplot(cuckoo_data2, aes(x = species, y = value, fill = measurement)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Stacked Bar Graph of Egg Length and Breadth by Species",
+       x = "Species",
+       y = "Measurement (mm)",
+       fill = "Measurement") +
+  theme_minimal()
+```
+
+## Inferential Statistical Analysis
+
+Two-way ANOVA to test how the species (dependent variable) influences the length (independent variable) of eggs from different bird species (independent variable).
+
+```{r}
+aov(breadth ~ species, data = cuckoo_data)
+```
+
+Two-way ANOVA test to test how bird species independently influence breadth.
+
+```{r}
+anova_length <- aov(length ~ species, data = cuckoo_data)
+summary(anova_length)
+```
+
+Multivariate Linear Regression to assess possible linear relationship of length and breadth measurements of eggs based on species.
+
+```{r}
+library(ggplot2)
+
+```
+
+## Discussion and Conclusion
