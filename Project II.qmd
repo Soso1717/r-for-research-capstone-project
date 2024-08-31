@@ -18,30 +18,29 @@ This project aims to investigate the egg dimensions—length and breadth—of si
 
 ## Importing Data
 
-For data manipulation, visualisation and analysis and to effectively read and access the relevant cuckoo data, the "tidyverse" and "readr" packages were installed and activated. The read.csv () function was used to import and read the data that is in CSV format. The data was assigned a new name termed cuckoo_data.
+For data manipulation, visualisation and analysis and to effectively read and access the relevant cuckoo data, the "tidyverse" was installed and activated. The read.csv () function was used to import and read the data that is in CSV format. The data was assigned a new name termed cuckoo_data.
 
 ```{r}
 library(tidyverse)
-library(readr)
 
 cuckoo_data <- read.csv("https://raw.githubusercontent.com/xrander/bootcamp-test/master/data/cuckoo.csv")
 
 ```
 
-To view and understand the contents of the data names() function was used to return the names of the columns in the cuckoo_data, this also ensures that the data has been imported correctly.
+To view and understand the contents of the data names() function was used to return the names of the columns in the cuckoo_data, this also ensures that the data has been imported correctly. The names of the the cuckoo_data are "length" "breadth" "species"
 
 ```{r}
 names(cuckoo_data)
 ```
 
-The head() function was implemented to preview the first 10 rows of the data, while the tail() function was run to preview the last 10 rows of the dataset, thereby making it easier to observe patterns in the data.
+The head() function was implemented to preview the first 10 rows of the data, while the tail() function was run to preview the last 10 rows of the dataset, thus making it easier to observe patterns in the data.
 
 ```{r}
 head(cuckoo_data, n = 10)
 tail(cuckoo_data, n = 10)
 ```
 
-Lastly, to further understand and observe the cuckoo_data the car::some() function was run, first setting a seed, to randomly select and generate a sample of rows from cuckoo_data dataset. The set.seed() allows the same results everytime the code is run.
+To further understand and observe the cuckoo_data the car::some() function was run, first setting a seed, to randomly select and generate a sample of rows from the cuckoo_data dataset. The set. seed() allows the same results every time the code is run.
 
 ```{r}
 set.seed(3891)
@@ -50,19 +49,34 @@ car::some(cuckoo_data)
 
 ## Exploratory Data Analysis
 
-To investigate the main characteristics of the data
+To investigate the main characteristics and understand the structure of the dataset, various analyses were conducted. The summary() function was run to return a key statistics overview of the data which include minimum, maximum, mean, median and quartiles for numerical variables of the data. The str() function gave statistics of the three variables in the data frame; length, breadth, species
 
 ```{r}
 summary(cuckoo_data)
+```
 
+The str() function was run to show the structure of the data along with the type and length of variables in the dataset. For cuckoo_data the str() function showed that the data has 120 observations, 3 variables, variables length and breadth are numerical, while species variable is character.
+
+```{r}
 str(cuckoo_data)
+```
 
+To identify distinct species present in the data frame, the unique() function was used and it generated six species names in the data, Meadow Pipit, Tree Pipit, Hedge Sparrow, Robin, Pied Wagtail and Wren.
+
+```{r}
 unique(cuckoo_data$species)
+```
 
+To check if the dataset had any missing values, the `is.na()` function was used, which returned `FALSE` for all columns, indicating no missing values. To obtain a more concise and straightforward summary, the `colSums()` function was applied to sum up the `FALSE` values for each column, resulting in a count of `0` for all columns, thereby confirming that there was no missing data in the dataset.
+
+```{r}
 colSums(is.na(cuckoo_data))
+```
 
+The skim() function was run to obtain an extended structure of the data and gave statical values of the data such as mean, median standard deviation along with missing values and histograms of the data . This function used along with skimr package combined the functionality if the summary() and str() function.
+
+```{r}
 skimr::skim(cuckoo_data)
-
 ```
 
 ## Visualisation
@@ -96,15 +110,7 @@ ggplot(cuckoo_data, aes(x = breadth, fill = species)) +
   geom_density(alpha = 0.5) +
   labs(title = "Density Plot of Egg Breadth by Species", x = "Egg Breadth (mm)", y = "Density")
 
-cuckoo_data2 <- gather(cuckoo_data, key = "measurement", value = "value", length, breadth)
 
-ggplot(cuckoo_data2, aes(x = species, y = value, fill = measurement)) +
-  geom_bar(stat = "identity") +
-  labs(title = "Stacked Bar Graph of Egg Length and Breadth by Species",
-       x = "Species",
-       y = "Measurement (mm)",
-       fill = "Measurement") +
-  theme_minimal()
 ```
 
 ## Inferential Statistical Analysis
@@ -118,8 +124,8 @@ aov(breadth ~ species, data = cuckoo_data)
 Two-way ANOVA test to test how bird species independently influence breadth.
 
 ```{r}
-anova_length <- aov(length ~ species, data = cuckoo_data)
-summary(anova_length)
+aov(length ~ species, data = cuckoo_data)
+
 ```
 
 Multivariate Linear Regression to assess possible linear relationship of length and breadth measurements of eggs based on species.
