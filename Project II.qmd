@@ -16,6 +16,8 @@ Research conducted in Russia has provided evidence of evolutionary adaptation in
 
 This project aims to investigate the egg dimensions—length and breadth—of six different cuckoo bird species, analysing 120 eggs. Various statistical analyses will be performed to determine differences in these dimensions both between and within the species.
 
+![Common Cuckoo Bird](Cuckoo_data%20image/cuckoo_image.jpg){fig-align="center"}
+
 ## Importing Data
 
 For data manipulation, visualisation and analysis and to effectively read and access the relevant cuckoo data, the "tidyverse" was installed and activated. The read.csv () function was used to import and read the data that is in CSV format. The data was assigned a new name termed cuckoo_data.
@@ -55,7 +57,7 @@ car::some(cuckoo_data)
 
 ## Exploratory Data Analysis
 
-To investigate the main characteristics and understand the structure of the dataset, various analyses were conducted. The summary() function gave statistics of the three variables in the data frame; length, breadth, and species below:
+Various analyses were conducted to investigate the main characteristics and understand the structure of the dataset. The summary() function gave statistics of the three variables in the data frame; length, breadth, and species below:
 
 A quick descriptive statistics of the data is given below:
 
@@ -63,7 +65,7 @@ A quick descriptive statistics of the data is given below:
 summary(cuckoo_data)
 ```
 
-The str() function was run to show the structure of the data along with the type and length of variables in the dataset. For cuckoo_data the str() function showed that the data has 120 observations, 3 variables, and the variables length and breadth are numerical, while species variable is character, as seen below:
+The str() function was run to show the data structure and the type and length of variables in the dataset. For cuckoo_data the str() function showed that the data has 120 observations and 3 variables, and the variable's length and breadth are numerical, while the species variable is a character, as seen below:
 
 ```{r}
 str(cuckoo_data)
@@ -81,7 +83,9 @@ The skim() function was run to obtain an extended structure of the data and gave
 skimr::skim(cuckoo_data)
 ```
 
-## Visualisation
+## Data Visualisation
+
+The box plot provides a visual summary of key statistics for the breadth of eggs within each species
 
 ```{r}
 library(ggplot2)
@@ -89,49 +93,58 @@ ggplot(cuckoo_data, aes(species, breadth)) +
   geom_boxplot() + 
   labs(x = "Species",
        y = "Breadth (mm)", 
-       title = "Comparing Breadth size between Species")
+       title = "Breadth size between Species")
 ```
+
+The box plot provides a visual summary of key statistics for the length of eggs within each species
 
 ```{r}
 ggplot(cuckoo_data, aes(species, length)) +
   geom_boxplot() +
   labs(x = "Species",
        y = "Length (mm)", 
-       title = "Comparing Length size bewteen Species")
+       title = "Length size bewteen Species")
 ```
+
+Scatter plot illustrating the relationship between breadth and length measurements within cuckoo bird species.
 
 ```{r}
 ggplot(cuckoo_data, aes(x = length, y = breadth, color = species)) +
   geom_point() +
   labs(x = "Egg Length (mm)",
        y = "Egg Breadth (mm)", 
-       title = "Scatter Plot of Egg Length vs Breadth by Species")
+       title = "Breath and Length Measurements Across Species")
 ```
+
+The distribution of length measurements by species is shown below using a density plot.
 
 ```{r}
 ggplot(cuckoo_data, aes(x = length, fill = species)) +
   geom_density(alpha = 0.5) +
-  labs(title = "Density Plot of Egg Length by Species", x = "Egg Length (mm)", y = "Density")
+  labs(x = "Egg Length (mm)", y = "Density",
+       title = "Density Plot of Egg Length by Species")
 ```
+
+The distribution of breadth measurements by species is shown below.
 
 ```{r}
 ggplot(cuckoo_data, aes(x = breadth, fill = species)) +
   geom_density(alpha = 0.5) +
-  labs(title = "Density Plot of Egg Breadth by Species", x = "Egg Breadth (mm)", y = "Density")
+  labs(x = "Egg Breadth (mm)", y = "Density",
+       title = "Density Plot of Egg Breadth by Species")
 ```
 
 ## Inferential Statistical Analysis
 
-Two-way ANOVA to test how the species (dependent variable) influences the length (independent variable) of eggs from different bird species (independent variable).
+The results ANOVA test were conducted to observe if there is a statically significant difference in the breadth of eggs between species is below:
 
 ```{r}
 breadth_anova <- aov(breadth ~ species, data = cuckoo_data) |>
   anova()
-
 breadth_anova
 ```
 
-Two-way ANOVA test to test how bird species independently influence breadth.
+The ANOVA results to see if there is a statically significant difference between the length of the eggs and species has a P-value of
 
 ```{r}
 length_anova <- aov(length ~ species, data = cuckoo_data)|>
@@ -140,16 +153,26 @@ length_anova <- aov(length ~ species, data = cuckoo_data)|>
 length_anova
 ```
 
+Linear regression model accessing a relationship between lengths and breadths of eggs shows a positive relationship.
+
 ```{r}
 library(ggplot2)
 lm_model <- lm(breadth ~ length + species, data = cuckoo_data) |>
   summary()
 
-ggplot(cuckoo_data, aes(x = length , y = breadth)) +
+ggplot(cuckoo_data, aes(x = length, y = breadth)) +
   geom_point() +
   geom_smooth(se = FALSE, method = "lm") +
-  ggtitle("Breadth vs Length of Eggs") +
-  theme_bw()
+  labs(x = "Length", y = "Breadth") +
+  ggtitle("Relationship between Egg Breadth and Length") +
+  theme_gray()
+
 ```
 
 ## Discussion and Conclusion
+
+The ANOVA test assessing the influence of species on the breadth of cuckoo eggs reveals a statistically significant difference in egg breadth among the different cuckoo species. This is proved by the small p-value (1.412e-08), the highly significant code (\*\*\*), and a high F value (10.885), which indicate that the variation between species is greater than the variation within species. Therefore, species have a significant effect on the breadth of eggs.
+
+Similarly, the ANOVA test evaluating the influence of species on the length of cuckoo eggs also shows a statistically significant difference in egg length across species. The p-value of 2.852e-08 and the associated significance code (\*\*\*) provide strong evidence to reject the null hypothesis, concluding that species significantly affect egg length.
+
+Additionally, the linear regression model demonstrates a positive relationship between the breadth and length of the eggs, suggesting that an increase in breadth is associated with an increase in length, and vice versa.
